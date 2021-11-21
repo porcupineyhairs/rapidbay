@@ -14,6 +14,7 @@ import settings
 import torrent
 from common import path_hierarchy
 from flask import Flask, Response, jsonify, request, send_from_directory, abort
+from flask.helpers import safe_join
 from rapidbaydaemon import FileStatus, RapidBayDaemon, get_filepaths
 from werkzeug.exceptions import NotFound
 
@@ -231,8 +232,8 @@ def files(magnet_hash):
 
 
 @app.route("/play/<string:magnet_hash>/<string:filename>")
-def play(magnet_hash, filename):
-    response = send_from_directory(f"/tmp/output/{magnet_hash}", filename)
+def play(magnet_hash, filename):    
+    response = send_from_directory(f"/tmp/output/", safe_join(magnet_hash,filename))
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
